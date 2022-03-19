@@ -1,0 +1,28 @@
+node
+{
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '1', artifactNumToKeepStr: '1', daysToKeepStr: '1', numToKeepStr: ''))])
+   def mvnHome = tool name: "maven3.6.3" 
+    stage('CheckoutCode')
+    {
+        git branch: 'development', credentialsId: 'c5820c98-ac5e-47b0-b94a-9c6240f405f9', url: 'https://github.com/dixitkumar14me/maven-web-application.git'
+    }
+    stage('Build')
+    {
+     sh "${mvnHome}/bin/mvn clean package"
+    }
+    stage('UploadwarToTomcatServer')
+      {
+     sshagent(['c0872a8f-4ac4-4427-a402-396aeeba34a0'])
+      {
+     sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ubuntu@13.233.126.113:/opt/apache-tomcat-9.0.56/webapps/"
+      }
+      }
+      stage('SendMailNotification')
+      {
+          mail bcc: '', body: '''BuildInfo
+
+            Regards
+           Dixit Kumar.''', cc: '', from: '', replyTo: '', subject: 'BuildInfo', to: 'dixit.kumar@arithaconsulting.com'
+      }
+     
+}

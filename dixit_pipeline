@@ -4,7 +4,7 @@ node
    def mvnHome = tool name: "maven3.6.3" 
     stage('CheckoutCode')
     {
-        git branch: 'development', credentialsId: 'c5820c98-ac5e-47b0-b94a-9c6240f405f9', url: 'https://github.com/dixitkumar14me/maven-web-application.git'
+        git branch: 'master', credentialsId: 'c5820c98-ac5e-47b0-b94a-9c6240f405f9', url: 'https://github.com/dixitkumar14me/maven-web-application.git'
     }
     stage('Build')
     {
